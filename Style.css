@@ -1,0 +1,323 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+:root{
+    --red:#fa0000;
+    --green:#009a2a;
+    --yellow:#fee800;
+    --blue:#00acff;
+}
+body{
+    background: radial-gradient(circle , rgba( 11 , 64 , 177 , 1 ) 0% , rgba( 7 , 30 , 78 , 1 ) 100%);
+}
+.ludoContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+    height: 100vh;
+}
+#ludoBoard{
+    max-width: 500px;
+    max-height: 500px;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    display: grid;
+    grid-template-areas:
+         'red-Board red-Board green-path green-Board green-Board'
+         'red-Board red-Board green-path green-Board green-Board'
+         'red-path  red-path  win-Zone   yellow-path yellow-path'
+         'blue-Board blue-Board blue-path yellow-Board yellow-Board'
+         'blue-Board blue-Board blue-path yellow-Board yellow-Board'
+    ;
+}
+/*=============> Board <=================*/
+#red-Board {
+    grid-area: red-Board;
+    background-color: var(--red);
+}
+#yellow-Board {
+    grid-area: yellow-Board;
+    background-color: var(--yellow);
+}
+#blue-Board {
+    grid-area: blue-Board;
+    background-color: var(--blue);
+}
+
+#green-Board {
+    grid-area: green-Board;
+    background-color: var(--green);
+}
+/*====================>  Path  <======================*/
+#green-path {
+    grid-area: green-path;
+}
+#blue-path {
+    grid-area: blue-path;
+}
+#red-path {
+    grid-area: red-path;
+}
+#yellow-path {
+    grid-area: yellow-path;
+    
+}
+/*====================> Win Zone <======================*/
+#win-Zone {
+    grid-area: win-Zone;
+}
+.win-zone{
+    display: grid;
+    position: relative;
+}
+.win-zone-red{
+    position: absolute;
+    left: -19px;
+    top: 12px;
+    transform: rotate(90deg);
+}
+.win-zone-green{
+    position: absolute;
+    transform: rotate(180deg);
+    top: -4px;
+    left: -2px;
+}
+.win-zone-yellow{
+    position: absolute;
+    transform: rotate(270deg);
+    top: 12px;
+    right: -19px;
+}
+.win-zone-blue{
+    position: absolute;
+    top: 28px;
+    left: -2px;
+}
+.win-zone-red svg{
+    stroke: var(--red);
+    fill: var(--red);
+}
+.win-zone-green svg{
+    stroke: var(--green);
+    fill: var(--green);
+}
+.win-zone-yellow svg{
+    stroke: var(--yellow);
+    fill: var(--yellow);
+}
+.win-zone-blue svg{
+    stroke: var(--blue);
+    fill: var(--blue);
+}
+.verticalPath{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(6,1fr);
+}
+.horizontalPath{
+    display: grid;
+    grid-template-columns: repeat(6,1fr);
+    grid-template-rows: repeat(3,1fr);
+}
+.board{
+    padding: 12px;
+    background: #1212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.board div {
+    width: 80%;
+    height: 80%;
+    background: white;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+}
+.board div span{
+    width: 50%;
+    height: 50%;
+    border-radius: 50%;
+    position: relative;
+}
+#yellow-Board div span{
+    background: var(--yellow);
+}
+#red-Board div span{
+    background: var(--red);
+}
+#blue-Board div span{
+    background: var(--blue);
+}
+#green-Board div span{
+    background: var(--green);
+}
+.ludoBox{
+    border: 1px solid #11111142;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.ludoBox .fa-location-pin{
+    position: absolute;
+    margin: 2px;
+    font-size: 2rem;
+    transform: translate(0,-40%);
+    -webkit-text-stroke-width: 2px;
+    z-index: 100;
+    -webkit-text-stroke-color: rgb(255, 255, 255);
+}
+.ludoBox .fa-star{
+    position: absolute;
+    color: #222;
+    opacity: .6;
+}
+@keyframes animateMyI {
+    0%{
+        transform: scale(1.1) translate(0,-40%);
+    }
+    100%{
+        transform: scale(1) translate(0,-40%);
+    }
+}
+.ludoBox .fa-location-pin:nth-child(2){
+    transform: translate(10px,-40%);
+}
+.ludoBox .fa-location-pin:nth-child(3){
+    transform: translate(10px,-40%);
+}
+.ludoBox .fa-location-pin:nth-child(4){
+    transform: translate(0px , -40%) scale(0.8);
+}
+.redLudoBox{
+    background: var(--red);
+}
+.yellowLudoBox{
+    background: var(--yellow);
+}
+.blueLudoBox{
+    background: var(--blue);
+}
+.greenLudoBox{
+    background: var(--green)
+}
+.board .piece {
+    position: absolute;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: rgb(255,255,255);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -90%);
+    font-size: 2.3rem;
+    z-index: 100;
+}
+ .active{
+    animation: animateBoard .8s linear infinite;
+
+}
+@keyframes animateBoard {
+    0%{
+        filter: brightness(1.4);
+    }
+    50%{
+        filter: brightness(1);
+    }
+    100%{
+        filter: brightness(1.4);
+    }
+}
+.red-piece {
+    color: var(--red);
+}
+.yellow-piece {
+    color: var(--yellow);
+}
+.green-piece {
+    color: var(--green);
+}
+.blue-piece{
+    color: var(--blue);
+}
+.blue-piece::after{
+    content: attr(myPieceNum);
+    font-weight: 600;
+    font-size: 9px;
+    color: white;
+    background: #00acff;
+    padding: 3px;
+    -webkit-text-stroke-width: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50% , 2px);
+}
+.rollingDice h2 {
+   color: #fff;
+}
+.rollingDice img{
+    width: 100px;
+    margin-top: 10px;
+}
+.rollingDice button {
+    padding: 10px 32px;
+    font-size: 1rem;
+    margin-top: 10px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#declareWinner{
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    color: white;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+canvas{
+    z-index: 9999 !important;
+}
+#declareWinner div{
+    width: 550px;
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 9999 !important;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 20px 10px;
+}
+#declareWinner div button{
+    padding: 8px 8px;
+    margin: 10px 0;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    background:#2b2b2b;
+    color: white;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 6px;
+}
