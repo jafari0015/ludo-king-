@@ -4,8 +4,14 @@ const  red_board = document.getElementById('red-Board');
 const  green_board = document.getElementById('green-Board');
 const  yellow_board = document.getElementById('yellow-Board');
 
-const rollDiceButton = document.getElementById('rollDiceButton');
-const rollDice  = document.getElementById('rollDice')
+
+const rollBtn = document.querySelector('.roll');
+const dice = document.querySelector('.dice');
+
+
+const diceRollSound = new Audio ( 'asset/sound/roll-dice.mp3');
+const killSound = new Audio ( 'asset/sound/kill-dice.mp3');
+const moveSound = new Audio ( 'asset/sound/movePieceR.wav');
 
 
 let playerTurn = [];
@@ -68,8 +74,8 @@ class player_pieces {
         this.position = this.gameEntry;
         let element = document.querySelector(`[piece_id = "${this.id}"]`);
         let toAppendDiv = document.getElementById(this.gameEntry);
-        console.log(element)
-        console.log(toAppendDiv)
+        // console.log(element)
+        // console.log(toAppendDiv)
         toAppendDiv.appendChild(element);
     }
 
@@ -117,8 +123,9 @@ class player_pieces {
 
 
  let numPvP = parseInt(prompt("Enter The Number Of Players:"));
+//  let numPvP = 4;
 
-
+  
 
 let playerPieces = [];
 let boardDetails = [
@@ -234,16 +241,24 @@ const giveArrayForMovingPath = (piece) => {
 };
 
 
-const moveElementSequentially = (elementId, array) => {
+
+const moveElementSequentially = (elementId, pathArray) => {
     const elementToMove = document.querySelector(`[piece_id="${elementId}"]`);
     let currentTeamTurn = playerTurn[currentPlayerTurnIndex];
     let piece = playerPieces.find(obj => obj.id === elementId);
     let toBreak = false;
 
     function moveToNextTarget(index) {
-        if (index >= array.length) return;
-        const currentTarget = document.getElementById(array[index]);
-        if (array[index] === 'home') {
+        if (index >= pathArray.length || toBreak) return;
+
+        // Play move sound for each step:
+        moveSound.pause();        // Stop if already playing
+        moveSound.currentTime = 0; // Rewind to start
+        moveSound.play();
+
+        const currentTarget = document.getElementById(pathArray[index]);
+
+        if (pathArray[index] === 'home') {
             let indexOfPiece = playerPieces.findIndex(obj => obj.id === piece.id);
             playerPieces.splice(indexOfPiece, 1);
             elementToMove.remove();
@@ -251,9 +266,9 @@ const moveElementSequentially = (elementId, array) => {
 
             let totalPiecesOfThisTeam = playerPieces.filter(obj => obj.team === currentTeamTurn);
 
-            if(totalPiecesOfThisTeam.length === 0){
+            if (totalPiecesOfThisTeam.length === 0) {
                 declareWinner(currentTeamTurn);
-                return
+                return;
             }
 
             if (currentTeamTurn === 'blue') {
@@ -263,15 +278,17 @@ const moveElementSequentially = (elementId, array) => {
             }
             return;
         }
-        piece.updatePosition(array[index]);
+
+        piece.updatePosition(pathArray[index]);
         currentTarget.appendChild(elementToMove);
+
         setTimeout(() => {
             moveToNextTarget(index + 1);
-        }, 170);
+        }, 170);  // Adjust delay to sync with sound duration if needed
     }
-    !toBreak && moveToNextTarget(0);
-};
 
+    moveToNextTarget(0);
+};
 
 const rollMyDice = async (hasBouns) => {
     currentPlayerTurnStatus = true;
@@ -349,6 +366,7 @@ const turnForBot = async () => {
        totalUnlockedPieces[i].movePiece(array);
        await delay(array.length * 175);
        cut.sentMeToBoard();
+       killSound.play();
        bounsReached = true;
        rollMyDice(true);
        return;
@@ -437,8 +455,9 @@ const turnForBot = async () => {
     }
 }
 // 3 unlocked pieces
-    let pieceSafe = totalUnlockedPieces.filter(obj => safePaths.includes(obj.position));
-    let pieceUnsafe = totalUnlockedPieces.filter(obj => !safePaths.includes(obj.position));
+    if(totalUnlockedPieces.length === 3){
+            let pieceSafe = totalUnlockedPieces.filter(obj => safePaths.includes(obj.position));
+            let pieceUnsafe = totalUnlockedPieces.filter(obj => !safePaths.includes(obj.position));
 
     if(pieceSafe.length === 0){
         let scoreOfFirstPiece = pieceUnsafe[0].score;
@@ -486,7 +505,7 @@ const turnForBot = async () => {
                 if (piecesNotAtHomePath.length > 0) {
                     if (!await attempMove(piecesNotAtHomePath[0])) return;
                 }else{
-                    for(let i = 0 ; i < piecesAtHHomePath; i++){
+                    for(let i = 0 ; i < piecesAtHHomePath.length; i++){
                         let movingPathArray = giveArrayForMovingPath(piecesAtHHomePath[i]);
                         if (movingPathArray.length ===diceResult){
                             isMoving = true;
@@ -499,9 +518,18 @@ const turnForBot = async () => {
         }              
     }
     if(!isMoving) {
-        nextTeamTurn();
+
+         for (let piece of totalUnlockedPieces) {
+        if (giveArrayForMovingPath(piece).length >= diceResult) {
+            isMoving = true;
+            await moveMyPiece(piece);
+            return;
+        }
+    }
+    nextTeamTurn();
     }
 };
+}
 
 
 
@@ -528,6 +556,7 @@ const turnForUser = async (e) => {
         piece.movePiece(array);
         await delay(array.length * 175);
         cut.sentMeToBoard();
+        killSound.play();
         currentPlayerTurnStatus = true;
         rollMyDice(true);
         return;
@@ -559,53 +588,75 @@ const turnForUser = async (e) => {
     }
 };
 
-const rollDiceGif = new Image();
-rollDiceGif.src = `./asset/dice-roll.gif`;
 
 
+    function showDiceFace(val) {
+        switch (val) {
+            case 1: dice.style.transform = 'rotateX(0deg) rotateY(0deg)'; break;
+            case 6: dice.style.transform = 'rotateX(180deg) rotateY(0deg)'; break;
+            case 2: dice.style.transform = 'rotateX(-90deg) rotateY(0deg)'; break;
+            case 5: dice.style.transform = 'rotateX(90deg) rotateY(0deg)'; break;
+            case 3: dice.style.transform = 'rotateX(0deg) rotateY(90deg)'; break;
+            case 4: dice.style.transform = 'rotateX(0deg) rotateY(-90deg)'; break;
+        }
+    };
 
-rollDiceButton.addEventListener('click', async() => {
+    
+rollBtn.addEventListener('click', async () => {
+    diceRollSound.play();
     let currentTeamTurn = playerTurn[currentPlayerTurnIndex];
+
     if (!currentPlayerTurnStatus) return;
 
-    rollDiceButton.disabled = true;
-    rollDice.src= rollDiceGif.src;
+    rollBtn.disabled = true;
+    dice.style.animation = 'rolling 0.6s';
     diceResult = Math.floor(Math.random() * 6) + 1;
+    showDiceFace(diceResult);
 
-    currentPlayerTurnStatus = false;//user used it chance
+
+    currentPlayerTurnStatus = false; 
     teamHasBouns = false;
 
-    setTimeout(async() =>{
-       rollDice.src = `./asset/Dice_${diceResult}.png` ;
-       await delay(700);
-       rollDiceButton.disabled = false;
+    setTimeout(async () => {
+        dice.style.animation = 'none';
+        await delay(700);
+        rollBtn.disabled = false;
 
-       let totalUnlockedPieces = playerPieces.filter(obj => obj.team === currentTeamTurn && obj.status === 1);
+        let totalUnlockedPieces = playerPieces.filter(obj => obj.team === currentTeamTurn && obj.status === 1);
 
-       if (totalUnlockedPieces.length === 0 && diceResult !== 6 && !teamHasBouns) {
-        await delay(500);
-        currentPlayerTurnStatus = true;
-        nextTeamTurn();
-       }
+        
+        if (totalUnlockedPieces.length === 0 && diceResult !== 6 && !teamHasBouns) {
+            await delay(500);
+            currentPlayerTurnStatus = true;
+            nextTeamTurn();
+        }
 
-    },600);
+    }, 600);
 });
 
-const rollDiceButtonForBot = async() => {
-    if (!currentPlayerTurnStatus) return;
 
-    rollDice.src= rollDiceGif.src;
-    diceResult = Math.floor(Math.random() * 6) + 1;
-    currentPlayerTurnStatus = false;
-    teamHasBouns = false;
+const rollDiceButtonForBot = async() => {
+    diceRollSound.play();
+       if (!currentPlayerTurnStatus) return;
+
+        rollBtn.disabled = true;
+        dice.style.animation = 'rolling 0.6s';
+        diceResult = Math.floor(Math.random() * 6) + 1;
+        showDiceFace(diceResult);
+
+        currentPlayerTurnStatus = false;//user used it chance
+        teamHasBouns = false;
 
     setTimeout(async() =>{
-       rollDice.src = `./asset/Dice_${diceResult}.png` ;
-       await delay(800);
-       rollDiceButton.disabled = false;
+        dice.style.animation = 'none'; // <-- Add this line to reset animation
+        rollBtn.disabled = false;
+        currentPlayerTurnStatus = true;
         turnForBot();
     },700);
 }
+
+    
+
 
 document.addEventListener('keydown', (e)=>{
     let currentTeamTurn = playerTurn[currentPlayerTurnIndex];
@@ -631,7 +682,7 @@ document.addEventListener('keydown', (e)=>{
         piece?.click()
     }
     if (e.code === 'Space') {
-       rollDiceButton.click();
+       rollBtn.click();
     }
 })
 
