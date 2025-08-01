@@ -411,9 +411,8 @@ canvas{
     margin: -35px 0 0 -35px;
     box-shadow: 25px 25px, 50px 50px;
 }
-.roll{
-    margin-top: 20px;
-    padding: 10px 10px;
-    border: none;
-    border-radius: 0.45rem;
+.roll-dice h2{
+    color: white;
+    margin-bottom: 20px;
+    
 }
