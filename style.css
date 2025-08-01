@@ -416,3 +416,65 @@ canvas{
     margin-bottom: 20px;
     
 }
+
+@media (max-width: 1250px) {
+    .roll-dice{
+        top: 80%;
+        right: 44%;
+    }
+}
+
+@media (max-width: 600px) {
+   .ludoContainer{
+    margin-top: -80px;
+   }
+   #ludoBoard{
+    max-width: 350px;
+    max-height: 350px;
+    width: 100%;
+    height: 100%;
+   }
+    .roll-dice{
+    top: 65%;
+    right: 40%;
+   }
+   .win-zone-blue svg{
+    width: 60px;
+    height: 50px;
+    margin-top: -10px;
+    margin-left: 6px;
+   }
+   .win-zone-green svg {
+    width: 60px;
+    height: 50px;
+    margin-right: 5px;
+    margin-top: -10px;
+   }
+   .win-zone-red svg{
+    width: 60px;
+    margin-top: -12px;
+    height: 50px;
+    margin-left: 5px;
+   }
+   .win-zone-yellow svg {
+    width: 60px;
+    height: 50px;
+    margin-top: -15px;
+    margin-right: 5px;
+   }
+  .board .piece {
+    font-size: 2rem;
+  }
+
+  .blue-piece::after {
+    font-size: 6px;
+  }
+
+  .ludoBox .fa-location-pin {
+    font-size: 1.3rem;
+  }
+
+  #declareWinner div {
+    padding: 16px 6px;
+  }
+}
