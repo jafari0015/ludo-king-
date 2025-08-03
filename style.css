@@ -402,8 +402,11 @@ canvas{
 
 @media (max-width: 1250px) {
     .roll-dice{
-        top: 75%;
+        top: 80%;
         right: 44%;
+    }
+    .ludoContainer{
+        margin-top: -50px;
     }
 }
 
@@ -456,4 +459,9 @@ canvas{
   .board .piece {
     font-size: 2rem;
   } 
+}
+@media (max-width) {
+    .roll-dice {
+        top: 80%;
+    }
 }
