@@ -610,8 +610,8 @@ rollBtn.addEventListener('click', async () => {
 
     rollBtn.disabled = true;
     dice.style.animation = 'rolling 0.6s';
-    // diceResult = Math.floor(Math.random() * 6) + 1;
-    diceResult = 6;
+    diceResult = Math.floor(Math.random() * 6) + 1;
+    // diceResult = 6;
     showDiceFace(diceResult);
 
 
