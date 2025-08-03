@@ -279,6 +279,7 @@ body{
     color: white;
     background: #00acff;
     padding: 3px;
+    margin-top: 2px;
     -webkit-text-stroke-width: 0;
     display: flex;
     justify-content: center;
@@ -288,24 +289,6 @@ body{
     left: 50%;
     transform: translate(-50% , 2px);
 }
-/* .rollingDice h2 {
-   color: #fff;
-}
-.rollingDice img{
-    width: 100px;
-    margin-top: 10px;
-}
-.rollingDice button {
-    padding: 10px 32px;
-    font-size: 1rem;
-    margin-top: 10px;
-    background-color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-} */
-
 #declareWinner{
     position:absolute;
     top: 0;
@@ -438,43 +421,39 @@ canvas{
     top: 65%;
     right: 40%;
    }
+   .roll-dice .dice{
+    width: 80px;
+    height: 80px;
+   }
+   .roll-dice h2 {
+    display: none;
+   }
    .win-zone-blue svg{
-    width: 60px;
+    width: 65px;
     height: 50px;
     margin-top: -10px;
-    margin-left: 6px;
+    margin-left: 4px;
    }
    .win-zone-green svg {
-    width: 60px;
+    width: 65px;
     height: 50px;
-    margin-right: 5px;
-    margin-top: -10px;
+    margin-right: 3px;
+    margin-top: -18px;
+    margin-bottom: -2px;
    }
    .win-zone-red svg{
-    width: 60px;
-    margin-top: -12px;
+    width: 65px;
+    margin-top: -14px;
     height: 50px;
-    margin-left: 5px;
+    margin-left: 2px;
    }
    .win-zone-yellow svg {
     width: 60px;
     height: 50px;
     margin-top: -15px;
-    margin-right: 5px;
+    margin-right: 2px;
    }
   .board .piece {
     font-size: 2rem;
-  }
-
-  .blue-piece::after {
-    font-size: 6px;
-  }
-
-  .ludoBox .fa-location-pin {
-    font-size: 1.3rem;
-  }
-
-  #declareWinner div {
-    padding: 16px 6px;
-  }
+  } 
 }

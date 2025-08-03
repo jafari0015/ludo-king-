@@ -284,7 +284,7 @@ const moveElementSequentially = (elementId, pathArray) => {
 
         setTimeout(() => {
             moveToNextTarget(index + 1);
-        }, 170);  // Adjust delay to sync with sound duration if needed
+        }, 170);
     }
 
     moveToNextTarget(0);
@@ -610,7 +610,8 @@ rollBtn.addEventListener('click', async () => {
 
     rollBtn.disabled = true;
     dice.style.animation = 'rolling 0.6s';
-    diceResult = Math.floor(Math.random() * 6) + 1;
+    // diceResult = Math.floor(Math.random() * 6) + 1;
+    diceResult = 6;
     showDiceFace(diceResult);
 
 
@@ -644,11 +645,11 @@ const rollDiceButtonForBot = async() => {
         diceResult = Math.floor(Math.random() * 6) + 1;
         showDiceFace(diceResult);
 
-        currentPlayerTurnStatus = false;//user used it chance
+        currentPlayerTurnStatus = false;
         teamHasBouns = false;
 
     setTimeout(async() =>{
-        dice.style.animation = 'none'; // <-- Add this line to reset animation
+        dice.style.animation = 'none'; 
         rollBtn.disabled = false;
         currentPlayerTurnStatus = true;
         turnForBot();
